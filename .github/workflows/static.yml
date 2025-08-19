@@ -43,11 +43,16 @@ jobs:
           # The -i'' flag is for macOS compatibility.
           # The | is an alternate separator for sed to handle the slashes in the URL.
           sed -i'' "s|\\$\\$\\$PAGES_URL\\$\\$\\$|$PAGES_URL|g" index.html
+      # Step to move the index.html file into a directory for uploading
+      - name: Prepare artifact directory
+        run: |
+          mkdir _site
+          mv index.html _site/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This is the updated path to upload only the modified index.html file
-          path: './index.html'
+          # This is the updated path to upload the created directory
+          path: './_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
